@@ -1,0 +1,99 @@
+plugins {
+	id 'java'
+	id 'scala'
+	
+	id 'groovy'
+}
+
+version('1.0')
+group('org.example')
+ext {
+	// 用于编译的SDK版本
+	SCALA_BINARY_VERSION = '2.12'
+	SCALA_VERSION = '2.12.12'
+	
+	// 用于Gradle编译项目的工具版本
+	JAVA_VERSION = '1.8'
+	JUNIT_JUPITER = '5.6.0'
+	KAFKA_VERSION = '2.5.0'
+	FLINK_VERSION = '1.11.1'
+	ELASTIC4S_VERSION = '7.9.10'
+	KIND_PROJECTOR = '0.11.3'
+	encoding = 'UTF-8'
+	ZINC_VERSION = '1.2.1'
+	ELASTICSEARCH_VERSIONS = '7.9.1'
+	slf4jVersion = '1.7.15'
+	log4jVersion = '2.12.1'
+}
+sourceCompatibility = JAVA_VERSION
+targetCompatibility = JAVA_VERSION
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	//java
+	scalaCompilerPlugins "org.typelevel:kind-projector_${SCALA_VERSION}:${KIND_PROJECTOR}"
+	//scala
+	implementation "org.scala-lang:scala-library:${SCALA_VERSION}"
+	implementation "org.scala-lang:scala-compiler:${SCALA_VERSION}"
+	implementation "org.scala-lang:scala-reflect:${SCALA_VERSION}"
+	implementation 'org.codehaus.groovy:groovy-all:3.0.5'
+	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+}
+
+test {
+	useJUnitPlatform()
+}
+//设置资源编译的编码
+tasks.withType(JavaCompile) {
+	options.encoding = "${encoding}"
+}
+sourceSets {
+	
+	
+	main {
+		scala {
+			srcDirs = ['src/main/scala', 'src/main/java', 'src/main/groovy']
+		}
+		java {
+			srcDirs = []
+		}
+		groovy {
+			srcDirs = []
+		}
+		
+	}
+	test {
+		scala {
+			srcDirs = ['src/test/scala', 'src/test/java', 'src/test/groovy']
+		}
+		java {
+			srcDirs = []
+		}
+		groovy {
+			srcDirs = []
+		}
+	}
+}
+tasks.withType(ScalaCompile) {
+	scalaCompileOptions.with {
+		force = true
+	}
+}
+compileScala {
+	options.fork = true
+	options.forkOptions.jvmArgs += ["-Xss8M"]
+}
+scala {
+	zincVersion = "${ZINC_VERSION}"
+}
+tasks.named('jar') {
+	manifest {
+		attributes('Implementation-Title': project.name,
+				'Implementation-Version': project.version)
+	}
+	
+}
+

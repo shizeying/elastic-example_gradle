@@ -1,0 +1,40 @@
+{
+  "settings": {
+    "number_of_replicas": 0  ,
+    "index.unassigned.node_left.delayed_timeout": "30s"
+  },
+  "mappings": {
+    "properties": {
+      "theatre": {
+        "type": "keyword"
+      },
+      "play": {
+        "type": "keyword"
+      },
+      "actors": {
+        "type": "keyword"
+      },
+      "date": {
+        "type": "keyword"
+      },
+      "time": {
+        "type": "keyword"
+      },
+      "cost": {
+        "type": "double"
+      },
+      "row": {
+        "type": "integer"
+      },
+      "number": {
+        "type": "integer"
+      },
+      "sold": {
+        "type": "boolean"
+      },
+      "datetime": {
+        "type": "date"
+      }
+    }
+  }
+}
